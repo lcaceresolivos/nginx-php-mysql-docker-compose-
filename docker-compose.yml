@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    volumes:
+      - ./src:/var/www/html
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+
+  php-fpm:
+    build:
+     context: ./
+     dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www/html
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: AQUI TU PASSWORD USUARIO ROOT DE MYSQL
+    ports: 
+      - '3306:3306'
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./config:/docker-entrypoint-initdb.d/config-sql.sql
